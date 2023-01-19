@@ -6,3 +6,14 @@ resource "aws_vpc" "nas_vpc" {
       Name="dev"
   }
 }
+
+resource "aws_subnet" "nas_public_subnet" {
+  vpc_id = aws_vpc.nas_vpc.id
+  cidr_block = "10.123.1.0/24"
+  availability_zone = "eu-central-1a"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name="dev-public"
+  }
+}
