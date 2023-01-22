@@ -35,7 +35,12 @@ resource "aws_route_table" "nasa_public_rt" {
 }
 
 resource "aws_route" "default_route" {
-  route_table_id = aws_route_table.nasa_public_rt.id
+  route_table_id         = aws_route_table.nasa_public_rt.id
   destination_cidr_block = "0.0.0.0/0" #sve ip adrese ce ici na internet gateway, koji definisemo dole
-  gateway_id = aws_internet_gateway.nas_internet_gateway.id
+  gateway_id             = aws_internet_gateway.nas_internet_gateway.id
+}
+
+resource "aws_route_table_association" "nas_public_assoc" {
+  route_table_id = aws_route_table.nasa_public_rt.id
+  subnet_id      = aws_subnet.nas_public_subnet.id
 }
