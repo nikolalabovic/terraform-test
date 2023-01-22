@@ -65,3 +65,8 @@ resource "aws_security_group" "nas_sg" {
   }
 }
 
+resource "aws_key_pair" "nas_auth" { #key pair se koristi za login access na ec2 instancu
+  key_name = "nas_key"
+  public_key = file("~/.ssh/naskey.pub")
+}
+
