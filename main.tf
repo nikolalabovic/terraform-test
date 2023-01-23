@@ -46,27 +46,43 @@ resource "aws_route_table_association" "nas_public_assoc" {
 }
 
 resource "aws_security_group" "nas_sg" {
-  name = "dev-sg"
+  name        = "dev-sg"
   description = "dev security group"
-  vpc_id = aws_vpc.nas_vpc.id
+  vpc_id      = aws_vpc.nas_vpc.id
 
   ingress {
-    from_port = 0
-    protocol  = "-1"
-    to_port   = 0
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
     cidr_blocks = ["192.168.1.111/32"]
   }
 
   egress {
-    from_port = 0
-    protocol  = "-1"
-    to_port   = 0
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
 resource "aws_key_pair" "nas_auth" { #key pair se koristi za login access na ec2 instancu
-  key_name = "nas_key"
+  key_name   = "nas_key"
   public_key = file("~/.ssh/naskey.pub")
 }
 
+resource "aws_instance" "dev_node" {
+  instance_type = "t2.micro"
+  ami           = data.aws_ami.server_ami.id
+  key_name               = aws_key_pair.nas_auth.id
+  vpc_security_group_ids = [aws_security_group.nas_sg.id] #dodajemo sg instanci
+  subnet_id              = aws_subnet.nas_public_subnet.id
+  user_data = file("userdata.tpl")
+
+  root_block_device {
+    volume_size = 10 #default je 8
+  }
+
+  tags = {
+    name = "dev-node"
+  }
+}
