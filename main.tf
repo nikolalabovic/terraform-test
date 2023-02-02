@@ -54,7 +54,7 @@ resource "aws_security_group" "nas_sg" {
     from_port   = 0
     protocol    = "-1"
     to_port     = 0
-    cidr_blocks = ["192.168.1.111/32"]
+    cidr_blocks = ["188.120.99.252/32"]
   }
 
   egress {
