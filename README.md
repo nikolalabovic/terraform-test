@@ -1,2 +1,2 @@
 # terraform-test
-Testing terraform with AWS
+Creating an EC2 instance with terraform
